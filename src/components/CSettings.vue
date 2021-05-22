@@ -1,9 +1,10 @@
 <template>
+  {{ cycleTime }}/{{ cycleValues.length }}
   <form>
     <label class="field">
-      <span class="label">Timer</span>
-      <span class="preview">{{ formatSeconds(settings.sessionTime) }}</span>
-      <c-slider v-model="settings.sessionTime" :values="sessionTimes"/>
+      <span class="label">Cycles</span>
+      <span class="preview">{{ settings.cycles }} ({{ formatSeconds(settings.cycles * cycleTime) }})</span>
+      <c-slider v-model="settings.cycles" :values="cycleValues"/>
     </label>
 
     <label class="field">
@@ -47,12 +48,17 @@
     },
 
     computed: {
-      sessionTimes() {
+      cycleTime() {
+        const s = this.settings;
+        return s.breatheIn + s.pauseIn + s.breatheOut + s.pauseOut;
+      },
+
+      cycleValues() {
         return [
-          ...range(10, 60, 10),
-          ...range(60, 6 * 60, 30),
-          ...range(6 * 60, 15 * 60, 60),
-          ...range(15 * 60, 31 * 60, 5 * 60),
+          ...range(6, 12, 1),
+          ...range(12, 36, 2),
+          ...range(36, 90, 4),
+          ...range(90, 190, 10),
         ];
       },
     },

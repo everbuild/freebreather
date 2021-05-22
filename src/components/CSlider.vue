@@ -46,7 +46,7 @@
     methods: {
       onInput(event) {
         const { value } = event.target;
-        this.$emit('update:modelValue', this.values ? this.values[value] : value);
+        this.$emit('update:modelValue', 1*(this.values ? this.values[value] : value));
       },
     },
   };

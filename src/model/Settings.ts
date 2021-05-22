@@ -1,5 +1,5 @@
 export default class Settings {
-  sessionTime = 6 * 60;
+  cycles = 36;
   breatheIn: number;
   pauseIn: number;
   breatheOut: number;
