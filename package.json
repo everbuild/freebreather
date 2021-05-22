@@ -1,0 +1,20 @@
+{
+  "name": "freebreather",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "deploy": "scp -P 55400 -r ./dist/* evert@everbuild.be:/var/www/everbuild.be/freebreather/"
+  },
+  "dependencies": {
+    "vue": "^3.0.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.2.2",
+    "@vue/compiler-sfc": "^3.0.5",
+    "lodash": "^4.17.21",
+    "sass": "^1.32.12",
+    "vite": "^2.2.3"
+  }
+}
