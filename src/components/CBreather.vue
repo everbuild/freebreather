@@ -7,9 +7,37 @@
 <script>
   import CSettings from './CSettings.vue';
   import Settings from '../model/Settings';
+  import { easeInOutQuad } from '../util/easing';
 
   const OFFSET = 30;
   const SCALE = 20;
+
+  const PHASES = [
+    {
+      name: 'breatheIn',
+      y(x) {
+        return easeInOutQuad(x);
+      },
+    },
+    {
+      name: 'pauseIn',
+      y(x) {
+        return 1;
+      },
+    },
+    {
+      name: 'breatheOut',
+      y(x) {
+        return 1 - easeInOutQuad(x);
+      },
+    },
+    {
+      name: 'pauseOut',
+      y(x) {
+        return 0;
+      },
+    },
+  ];
 
   export default {
     components: { CSettings },
@@ -24,15 +52,8 @@
     data() {
       return {
         active: false,
-        r: 10,
-        period: 10000,
+        r: OFFSET,
       };
-    },
-
-    computed: {
-      speed() {
-        return 2 * Math.PI / this.period;
-      },
     },
 
     mounted() {
@@ -48,12 +69,30 @@
         if (this.active) return;
         this.active = true;
 
-        let x = 0;
+        let phaseIdx = 0;
+        let phase;
+        let phaseDuration;
+        let phaseTime = 0;
+
+        const startPhase = () => {
+          phase = PHASES[phaseIdx % PHASES.length];
+          phaseDuration = this.settings[phase.name];
+        };
+
+        startPhase();
+
+        this.r = OFFSET;
 
         const frame = (t1, t2) => {
           const dt = t2 - t1;
-          x += dt * this.speed;
-          this.r = OFFSET + SCALE * Math.sin(x);
+          phaseTime += dt / 1000;
+          while (phaseTime >= phaseDuration) {
+            phaseTime -= phaseDuration;
+            ++phaseIdx;
+            startPhase();
+          }
+          const y = phase.y(phaseTime / phaseDuration);
+          this.r = OFFSET + SCALE * y;
           if (this.active) requestAnimationFrame(t3 => frame(t2, t3));
         };
 

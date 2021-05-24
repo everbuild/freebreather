@@ -3,7 +3,7 @@
     <form>
       <label class="field">
         <span class="label">Timer</span>
-        <span class="preview">{{ formatSeconds(settings.cycles * cycleTime) }} ({{ settings.cycles }} breaths)</span>
+        <span class="preview">{{ formatSeconds(settings.cycles * settings.totalTime) }} ({{ settings.cycles }} breaths)</span>
         <c-slider v-model="settings.cycles" :values="cycleValues"/>
       </label>
 
@@ -50,11 +50,6 @@
     },
 
     computed: {
-      cycleTime() {
-        const s = this.settings;
-        return s.breatheIn + s.pauseIn + s.breatheOut + s.pauseOut;
-      },
-
       cycleValues() {
         return [
           ...range(6, 12, 1),
@@ -68,7 +63,7 @@
     methods: {
       formatSeconds(value) {
         const minutes = Math.floor(value / 60);
-        const seconds = Math.round(value % 60);
+        const seconds = Math.round((value % 60)*10)/10;
         return [
           minutes && `${minutes}m`,
           (seconds || !minutes) && `${seconds}s`,

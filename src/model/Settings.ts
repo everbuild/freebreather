@@ -15,6 +15,10 @@ export default class Settings {
     this.breatheOut = preset.breatheOut;
     this.pauseOut = preset.pauseOut;
   }
+
+  get totalTime() {
+    return this.breatheIn + this.pauseIn + this.breatheOut + this.pauseOut;
+  }
 }
 
 export class Preset {
