@@ -1,16 +1,16 @@
 <template>
-  {{ cycleTime }}/{{ cycleValues.length }}
-  <form>
-    <label class="field">
-      <span class="label">Cycles</span>
-      <span class="preview">{{ settings.cycles }} ({{ formatSeconds(settings.cycles * cycleTime) }})</span>
-      <c-slider v-model="settings.cycles" :values="cycleValues"/>
-    </label>
+  <div class="wrapper">
+    <form>
+      <label class="field">
+        <span class="label">Timer</span>
+        <span class="preview">{{ formatSeconds(settings.cycles * cycleTime) }} ({{ settings.cycles }} breaths)</span>
+        <c-slider v-model="settings.cycles" :values="cycleValues"/>
+      </label>
 
-    <label class="field">
-      <span class="label">Breathe in</span>
-      <span class="preview">{{ formatSeconds(settings.breatheIn) }}</span>
-      <c-slider v-model="settings.breatheIn" min="0" max="7" step=".1"/>
+      <label class="field">
+        <span class="label">Breathe in</span>
+        <span class="preview">{{ formatSeconds(settings.breatheIn) }}</span>
+        <c-slider v-model="settings.breatheIn" min="0" max="7" step=".1"/>
     </label>
 
     <label class="field">
@@ -25,12 +25,13 @@
       <c-slider v-model="settings.breatheOut" min="0" max="7" step=".1"/>
     </label>
 
-    <label class="field">
-      <span class="label">Pause after breathing out</span>
-      <span class="preview">{{ formatSeconds(settings.pauseOut) }}</span>
-      <c-slider v-model="settings.pauseOut" min="0" max="7" step=".1"/>
-    </label>
-  </form>
+      <label class="field">
+        <span class="label">Pause after breathing out</span>
+        <span class="preview">{{ formatSeconds(settings.pauseOut) }}</span>
+        <c-slider v-model="settings.pauseOut" min="0" max="7" step=".1"/>
+      </label>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -44,6 +45,7 @@
     props: {
       settings: {
         type: Settings,
+        required: true,
       },
     },
 
@@ -66,7 +68,7 @@
     methods: {
       formatSeconds(value) {
         const minutes = Math.floor(value / 60);
-        const seconds = value % 60;
+        const seconds = Math.round(value % 60);
         return [
           minutes && `${minutes}m`,
           (seconds || !minutes) && `${seconds}s`,
@@ -75,3 +77,31 @@
     },
   };
 </script>
+
+<style lang="scss" scoped>
+  .wrapper {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 400px;
+    max-width: 100vw;
+    padding: 4em;
+  }
+
+  .label {
+    float: left;
+  }
+
+  .preview {
+    float: right;
+  }
+
+  .field {
+    display: block;
+    margin-bottom: 1em;
+  }
+</style>

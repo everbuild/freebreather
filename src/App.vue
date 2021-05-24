@@ -1,12 +1,20 @@
 <template>
-<!--  <img alt="Vue logo" src="./assets/logo.png" />-->
-  <Breather/>
+  <c-breather :settings="settings"/>
+  <c-settings :settings="settings"/>
 </template>
 
-<script setup>
-//import HelloWorld from './components/HelloWorld.vue'
-import Breather from './components/Breather.vue'
+<script>
+  import CBreather from './components/CBreather.vue';
+  import Settings from './model/Settings.ts';
+  import CSettings from './components/CSettings.vue';
 
-// This starter template is using Vue 3 experimental <script setup> SFCs
-// Check out https://github.com/vuejs/rfcs/blob/script-setup-2/active-rfcs/0000-script-setup.md
+  export default {
+    components: { CSettings, CBreather },
+
+    data() {
+      return {
+        settings: new Settings(),
+      };
+    },
+  };
 </script>
