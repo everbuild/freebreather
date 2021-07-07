@@ -35,7 +35,7 @@
     .done {
       height: 4px;
       background: $color-done;
-      transition: width 1s linear;
+      transition: width .1s linear;
     }
   }
 </style>

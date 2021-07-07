@@ -44,7 +44,7 @@
 
     computed: {
       progress() {
-        return Math.floor(this.status.runTime) / this.settings.totalTime;
+        return Math.floor(this.status.runTime * 10) / this.settings.totalTime / 10;
       },
 
       remaining() {
