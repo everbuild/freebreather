@@ -1,33 +1,37 @@
 export default class Settings {
   cycles = 36;
-  breatheIn: number;
-  pauseIn: number;
-  breatheOut: number;
-  pauseOut: number;
+  inhale: number;
+  inhaled: number;
+  exhale: number;
+  exhaled: number;
 
   constructor(preset = defaultPreset) {
     this.apply(preset);
   }
 
   apply(preset: Preset) {
-    this.breatheIn = preset.breatheIn;
-    this.pauseIn = preset.pauseIn;
-    this.breatheOut = preset.breatheOut;
-    this.pauseOut = preset.pauseOut;
+    this.inhale = preset.inhale;
+    this.inhaled = preset.inhaled;
+    this.exhale = preset.exhale;
+    this.exhaled = preset.exhaled;
+  }
+
+  get cycleTime() {
+    return this.inhale + this.inhaled + this.exhale + this.exhaled;
   }
 
   get totalTime() {
-    return this.breatheIn + this.pauseIn + this.breatheOut + this.pauseOut;
+    return this.cycleTime*this.cycles;
   }
 }
 
 export class Preset {
   constructor(
     public name: number,
-    public breatheIn: number,
-    public pauseIn: number,
-    public breatheOut: number,
-    public pauseOut: number,
+    public inhale: number,
+    public inhaled: number,
+    public exhale: number,
+    public exhaled: number,
   ) {
   }
 }

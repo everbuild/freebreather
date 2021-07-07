@@ -7,5 +7,23 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: $color-primary;
-  margin-top: 25vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.clickable, .button {
+  cursor: pointer;
+}
+
+.button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .icon {
+    height: 1.5em;
+    padding: 0 .25em;
+  }
 }
