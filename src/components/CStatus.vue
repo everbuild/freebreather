@@ -1,13 +1,13 @@
 <template>
   <div class="status-root">
     <div class="controls">
-      <div style="width: 4em">{{ status.phase }}</div>
-      <div style="width: 4em">{{ remaining }}</div>
+      <div style="width: 4em">{{ done ? 'done' : status.phase }}</div>
+      <div style="width: 4em" v-if="!done">{{ remaining }}</div>
       <div v-if="status.active" class="button" @click="$emit('pause')">
         <c-icon name="pause"/>
         <span>Pause</span>
       </div>
-      <div v-else class="button" @click="$emit('resume')">
+      <div v-else-if="!done" class="button" @click="$emit('resume')">
         <c-icon name="play"/>
         <span>Resume</span>
       </div>
@@ -45,6 +45,10 @@
     computed: {
       progress() {
         return Math.floor(this.status.runTime * 10) / this.settings.totalTime / 10;
+      },
+
+      done() {
+        return this.settings.totalTime === this.status.runTime;
       },
 
       remaining() {
