@@ -10,8 +10,9 @@ export function formatSecondsText(value) {
 export function formatSecondsDigital(value) {
   const minutes = Math.floor(value / 60);
   const seconds = Math.round(value % 60);
-  return [
-    minutes,
-    `${seconds}`.padStart(2, '0'),
-  ].filter(Boolean).join(':');
+  if (minutes === 0) {
+    return seconds;
+  } else {
+    return minutes + ':' + `${seconds}`.padStart(2, '0');
+  }
 }
