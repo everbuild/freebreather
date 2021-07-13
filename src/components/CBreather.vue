@@ -82,6 +82,7 @@
 
       stop() {
         this.active = false;
+        this._emitStatus();
       },
 
       _startPhase() {
@@ -90,6 +91,8 @@
       },
 
       _frame(t1, t2) {
+        if (!this.active) return;
+
         const dt = (t2 - t1) / 1000;
         this.phaseTime += dt;
 
@@ -111,7 +114,7 @@
         this.runTime += dt;
         this._emitStatus();
 
-        if (this.active) requestAnimationFrame(t3 => this._frame(t2, t3));
+        requestAnimationFrame(t3 => this._frame(t2, t3));
       },
 
       _finish() {
