@@ -97,10 +97,12 @@
   .presets {
     display: flex;
     flex-direction: row;
+    margin-right: -1em;
 
     a {
       flex: 1 0 auto;
       text-align: right;
+      padding-right: 1em;
     }
   }
 </style>
