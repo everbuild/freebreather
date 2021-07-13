@@ -24,7 +24,7 @@
 
     data() {
       return {
-        settings: new Settings(),
+        settings: new Settings().load(),
         status: null,
       };
     },
@@ -66,6 +66,7 @@
 
       resume() {
         this.$refs.breather.start();
+        this.settings.save();
       },
 
       reset() {

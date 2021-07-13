@@ -21,7 +21,20 @@ export default class Settings {
   }
 
   get totalTime() {
-    return this.cycleTime*this.cycles;
+    return this.cycleTime * this.cycles;
+  }
+
+  save() {
+    localStorage.setItem('settings', JSON.stringify(this));
+  }
+
+  load(): Settings {
+    const value = localStorage.getItem('settings');
+    if (value) {
+      const data = JSON.parse(value);
+      Object.assign(this, data);
+    }
+    return this;
   }
 }
 
