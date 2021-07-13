@@ -31,3 +31,13 @@ body {
     color: $color-accent;
   }
 }
+
+a {
+  color: mix($color-primary, $color-bg, 70%);
+  text-decoration: none;
+  transition: color .2s;
+
+  &:hover {
+    color: $color-primary;
+  }
+}

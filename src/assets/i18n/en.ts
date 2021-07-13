@@ -7,6 +7,7 @@ export default {
       exhale: 'Breathe out',
       exhaled: 'Pause after breathing out',
     },
+    presets: 'Presets:',
   },
   status: {
     phase: {

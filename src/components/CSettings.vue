@@ -29,13 +29,18 @@
       <span class="preview">{{ formatSeconds(settings.exhaled) }}</span>
       <c-slider v-model="settings.exhaled" min="0" max="7" step=".1"/>
     </label>
+
+    <div class="presets">
+      <label>{{ $t('settings.presets') }}</label>
+      <a v-for="preset in presets" href="#" @click="settings.apply(preset)">{{ preset.name }}</a>
+    </div>
   </form>
 </template>
 
 <script>
   import { range } from 'lodash';
   import CSlider from './CSlider.vue';
-  import Settings from '../model/Settings';
+  import Settings, { presets } from '../model/Settings';
   import { formatSecondsText } from '../util/time';
 
   export default {
@@ -56,6 +61,10 @@
           ...range(36, 90, 4),
           ...range(90, 190, 10),
         ];
+      },
+
+      presets() {
+        return presets;
       },
     },
 
@@ -83,5 +92,15 @@
   .field {
     display: block;
     margin-bottom: 1em;
+  }
+
+  .presets {
+    display: flex;
+    flex-direction: row;
+
+    a {
+      flex: 1 0 auto;
+      text-align: right;
+    }
   }
 </style>

@@ -7,6 +7,7 @@ export default {
       exhale: 'Uitademen',
       exhaled: 'Pauze na uitademen',
     },
+    presets: 'Presets:',
   },
   status: {
     phase: {
