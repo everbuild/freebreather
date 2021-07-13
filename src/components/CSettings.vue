@@ -86,7 +86,7 @@
 
 <style lang="scss" scoped>
   form {
-    padding: 4em;
+    padding: 0 4em;
   }
 
   .label {

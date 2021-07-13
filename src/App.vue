@@ -1,10 +1,10 @@
 <template>
-  <div class="app-root">
+  <div class="app-root" :class="rootClass">
     <div class="breather-block clickable">
       <c-breather ref="breather" :settings="settings" @click="toggle" @status="status = $event"/>
       <c-icon v-if="canStart" name="play"/>
     </div>
-    <div class="settings-block" :class="settingsClass">
+    <div class="settings-block">
       <c-settings class="settings" :settings="settings"/>
     </div>
   </div>
@@ -42,9 +42,9 @@
         return this.settings.totalTime === this.status?.runTime;
       },
 
-      settingsClass() {
+      rootClass() {
         return {
-          collapsed: this.status?.active || this.done,
+          active: this.status?.active || this.done,
         };
       },
     },
@@ -79,6 +79,7 @@
       this.onKeydown = event => {
         if (event.key === ' ') {
           this.toggle();
+          event.preventDefault();
         }
       };
       document.addEventListener('keydown', this.onKeydown);
@@ -92,14 +93,10 @@
 
 <style lang="scss" scoped>
   .app-root {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding-top: 16vh;
+    margin-bottom: 8em;
   }
 
   .breather-block {
-    flex: 0 1 60vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -118,23 +115,55 @@
     }
   }
 
-  .settings-block {
-    $width: 25rem;
-
-    flex: 0 0 auto;
-    width: $width;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    overflow: hidden;
-    transition: width .5s;
-
-    .settings {
-      width: $width;
+  @media (orientation: landscape) and (min-width: 40rem) {
+    .app-root {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      height: calc(100vh - 4em);
     }
 
-    &.collapsed {
-      width: 0;
+    .breather-block {
+      flex: 0 1 60vh;
+    }
+
+    .settings-block {
+      $width: 25rem;
+
+      flex: 0 0 auto;
+      width: $width;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+      transition: width .5s;
+
+      .settings {
+        width: $width;
+      }
+
+      .active & {
+        width: 0;
+      }
+    }
+  }
+
+  @media (orientation: portrait), (max-width: 40rem) {
+    .app-root {
+      min-width: 25rem;
+    }
+
+    .breather-block {
+      width: 50vw;
+      height: 50vw;
+      padding: 4em;
+      margin: auto;
+      transition: width .5s, height .5s;
+
+      .active & {
+        width: 100vw;
+        height: calc(100vh - 4em);
+      }
     }
   }
 </style>

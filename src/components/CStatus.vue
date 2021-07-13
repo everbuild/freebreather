@@ -65,6 +65,8 @@
     left: 0;
     right: 0;
     padding: 1em;
+    background: $color-bg;
+    box-shadow: 0 -1em 1em $color-bg;
 
     .controls {
       display: flex;
