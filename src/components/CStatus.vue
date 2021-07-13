@@ -1,19 +1,19 @@
 <template>
   <div class="status-root">
     <div class="controls">
-      <div>{{ done ? 'done' : status.phase }}</div>
+      <div>{{ $t(`status.phase.${done ? 'done' : status.phase}`) }}</div>
       <div v-if="!done">{{ remaining }}</div>
       <div v-if="status.active" class="button" @click="$emit('pause')">
         <c-icon name="pause"/>
-        <span>Pause</span>
+        <span>{{ $t('status.pause') }}</span>
       </div>
       <div v-else-if="!done" class="button" @click="$emit('resume')">
         <c-icon name="play"/>
-        <span>Resume</span>
+        <span>{{ $t('status.resume') }}</span>
       </div>
       <div class="button" @click="$emit('reset')">
         <c-icon name="close"/>
-        <span>Reset</span>
+        <span>{{ $t('status.reset') }}</span>
       </div>
     </div>
     <c-progress :value="progress"/>

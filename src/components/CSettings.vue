@@ -1,31 +1,31 @@
 <template>
   <form>
     <label class="field">
-      <span class="label">Timer</span>
-      <span class="preview">{{ formatSeconds(settings.totalTime) }} ({{ settings.cycles }} breaths)</span>
+      <span class="label">{{ $t('settings.timer') }}</span>
+      <span class="preview">{{ formatSeconds(settings.totalTime) }} ({{ settings.cycles }} {{ $t('breaths') }})</span>
       <c-slider v-model="settings.cycles" :values="cycleValues"/>
     </label>
 
     <label class="field">
-      <span class="label">Breathe in</span>
+      <span class="label">{{ $t('settings.phase.inhale') }}</span>
       <span class="preview">{{ formatSeconds(settings.inhale) }}</span>
       <c-slider v-model="settings.inhale" min="0" max="7" step=".1"/>
     </label>
 
     <label class="field">
-      <span class="label">Pause after breathing in</span>
+      <span class="label">{{ $t('settings.phase.inhaled') }}</span>
       <span class="preview">{{ formatSeconds(settings.inhaled) }}</span>
       <c-slider v-model="settings.inhaled" min="0" max="7" step=".1"/>
     </label>
 
     <label class="field">
-      <span class="label">Breathe out</span>
+      <span class="label">{{ $t('settings.phase.exhale') }}</span>
       <span class="preview">{{ formatSeconds(settings.exhale) }}</span>
       <c-slider v-model="settings.exhale" min="0" max="7" step=".1"/>
     </label>
 
     <label class="field">
-      <span class="label">Pause after breathing out</span>
+      <span class="label">{{ $t('settings.phase.exhaled') }}</span>
       <span class="preview">{{ formatSeconds(settings.exhaled) }}</span>
       <c-slider v-model="settings.exhaled" min="0" max="7" step=".1"/>
     </label>
