@@ -22,4 +22,5 @@ export default {
     resume: 'Resume',
     reset: 'Reset',
   },
+  homepage: 'this is open-source'
 };

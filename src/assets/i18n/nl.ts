@@ -22,4 +22,5 @@ export default {
     resume: 'Verder',
     reset: 'Opnieuw',
   },
+  homepage: 'dit is open-source'
 };

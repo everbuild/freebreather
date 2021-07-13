@@ -34,6 +34,13 @@
       <label>{{ $t('settings.presets') }}</label>
       <a v-for="preset in presets" href="#" @click="settings.apply(preset)">{{ preset.name }}</a>
     </div>
+
+    <div class="info">
+      <a class="button" href="https://github.com/everbuild/freebreather" target="_blank">
+        <c-icon name="github"/>
+        <span>{{ $t('homepage') }}</span>
+      </a>
+    </div>
   </form>
 </template>
 
@@ -42,9 +49,10 @@
   import CSlider from './CSlider.vue';
   import Settings, { presets } from '../model/Settings';
   import { formatSecondsText } from '../util/time';
+  import CIcon from './CIcon.vue';
 
   export default {
-    components: { CSlider },
+    components: { CIcon, CSlider },
 
     props: {
       settings: {
@@ -102,6 +110,17 @@
     a {
       flex: 1 0 auto;
       text-align: right;
+      padding-right: 1em;
+    }
+  }
+
+  .info {
+    display: flex;
+    justify-content: flex-end;
+    font-size: .75em;
+    margin-top: 2em;
+
+    .button .icon {
       padding-right: 1em;
     }
   }
