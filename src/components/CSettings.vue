@@ -2,7 +2,7 @@
   <form>
     <label class="field">
       <span class="label">{{ $t('settings.timer') }}</span>
-      <span class="preview">{{ formatSeconds(settings.totalTime) }} ({{ settings.cycles }} {{ $t('breaths') }})</span>
+      <span class="preview">{{ formatSeconds(settings.totalTime) }} ({{ settings.cycles }} {{ $t('settings.breaths') }})</span>
       <c-slider v-model="settings.cycles" :values="cycleValues"/>
     </label>
 

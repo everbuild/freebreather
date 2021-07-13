@@ -1,6 +1,7 @@
 export default {
   settings: {
     timer: 'Timer',
+    breaths: 'ademhalingen',
     phase: {
       inhale: 'Inademen',
       inhaled: 'Pauze na inademen',
