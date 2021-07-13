@@ -2,13 +2,13 @@
   <div class="app-root">
     <div class="breather-block clickable">
       <c-breather ref="breather" :settings="settings" @click="toggle" @status="status = $event"/>
-      <c-icon v-if="state !== 1" name="play"/>
+      <c-icon v-if="canStart" name="play"/>
     </div>
-    <div class="settings-block" :class="{'collapsed': state === 1}">
+    <div class="settings-block" :class="settingsClass">
       <c-settings class="settings" :settings="settings"/>
     </div>
   </div>
-  <c-status v-if="status && state !== 0" :settings="settings" :status="status"
+  <c-status v-if="started" :settings="settings" :status="status"
             @pause="pause" @resume="resume" @reset="reset"/>
 </template>
 
@@ -19,26 +19,41 @@
   import CIcon from './components/CIcon.vue';
   import CStatus from './components/CStatus.vue';
 
-  const STATE = {
-    READY: 0,
-    RUNNING: 1,
-    PAUSED: 2,
-  };
-
   export default {
     components: { CStatus, CIcon, CSettings, CBreather },
 
     data() {
       return {
         settings: new Settings(),
-        state: STATE.READY,
         status: null,
       };
     },
 
+    computed: {
+      canStart() {
+        return !this.status?.active && !this.done;
+      },
+
+      started() {
+        return this.status?.runTime > 0;
+      },
+
+      done() {
+        return this.settings.totalTime === this.status?.runTime;
+      },
+
+      settingsClass() {
+        return {
+          collapsed: this.status?.active || this.done,
+        };
+      },
+    },
+
     methods: {
       toggle() {
-        if (this.state === STATE.RUNNING) {
+        if (this.done) {
+          this.reset();
+        } else if (this.status?.active) {
           this.pause();
         } else {
           this.resume();
@@ -47,18 +62,15 @@
 
       pause() {
         this.$refs.breather.stop();
-        this.state = STATE.PAUSED;
       },
 
       resume() {
         this.$refs.breather.start();
-        this.state = STATE.RUNNING;
       },
 
       reset() {
         this.$refs.breather.stop();
         this.$refs.breather.reset();
-        this.state = STATE.READY;
       },
     },
 
