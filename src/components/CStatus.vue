@@ -1,8 +1,8 @@
 <template>
   <div class="status-root">
     <div class="controls">
-      <div style="width: 4em">{{ done ? 'done' : status.phase }}</div>
-      <div style="width: 4em" v-if="!done">{{ remaining }}</div>
+      <div>{{ done ? 'done' : status.phase }}</div>
+      <div v-if="!done">{{ remaining }}</div>
       <div v-if="status.active" class="button" @click="$emit('pause')">
         <c-icon name="pause"/>
         <span>Pause</span>
@@ -72,6 +72,11 @@
       justify-content: space-evenly;
       margin-bottom: 1rem;
       font-size: 1.5rem;
+
+      > * {
+        min-width: 5em;
+        text-align: left;
+      }
     }
   }
 </style>

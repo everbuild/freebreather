@@ -26,4 +26,8 @@ body {
     height: 1.5em;
     padding: 0 .25em;
   }
+
+  &:hover {
+    color: $color-accent;
+  }
 }
