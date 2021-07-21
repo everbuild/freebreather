@@ -11,16 +11,16 @@ export default {
     presets: 'Presets:',
   },
   status: {
-    phase: {
-      inhale: 'Breathe in',
-      inhaled: 'Pause',
-      exhale: 'Breathe out',
-      exhaled: 'Pause',
-      done: 'Well done!',
-    },
     pause: 'Pause',
     resume: 'Resume',
     reset: 'Reset',
   },
-  homepage: 'this is open-source'
+  guide: {
+    inhale: 'Breathe in',
+    inhaled: 'Pause',
+    exhale: 'Breathe out',
+    exhaled: 'Pause',
+    done: 'Well done!',
+  },
+  homepage: 'this is open-source',
 };

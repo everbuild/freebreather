@@ -1,15 +1,17 @@
 <template>
-  <div class="app-root" :class="rootClass">
+  <div class="app-root" :class="{active}">
     <div class="breather-block clickable">
-      <c-breather ref="breather" :settings="settings" @click="toggle" @status="status = $event"/>
-      <c-icon v-if="canStart" name="play"/>
+      <c-breather :breather="breather" @click="toggle"/>
+      <div class="overlay">
+        <c-guide v-if="active" :breather="breather"/>
+        <c-icon v-else name="play"/>
+      </div>
     </div>
     <div class="settings-block">
       <c-settings class="settings" :settings="settings"/>
     </div>
   </div>
-  <c-status v-if="started" :settings="settings" :status="status"
-            @pause="pause" @resume="resume" @reset="reset"/>
+  <c-status v-if="started" :breather="breather" @pause="pause" @resume="resume" @reset="reset"/>
 </template>
 
 <script>
@@ -18,42 +20,36 @@
   import CSettings from './components/CSettings.vue';
   import CIcon from './components/CIcon.vue';
   import CStatus from './components/CStatus.vue';
+  import CGuide from './components/CGuide.vue';
+  import { Breather } from './model/Breather';
 
   export default {
-    components: { CStatus, CIcon, CSettings, CBreather },
+    components: { CGuide, CStatus, CIcon, CSettings, CBreather },
 
     data() {
+      const settings = new Settings().load();
+      const breather = new Breather(settings);
       return {
-        settings: new Settings().load(),
-        status: null,
+        settings,
+        breather,
       };
     },
 
     computed: {
-      canStart() {
-        return !this.status?.active && !this.done;
+      active() {
+        return this.breather.active || this.breather.done;
       },
 
       started() {
-        return this.status?.runTime > 0;
-      },
-
-      done() {
-        return this.settings.totalTime === this.status?.runTime;
-      },
-
-      rootClass() {
-        return {
-          active: this.status?.active || this.done,
-        };
+        return this.breather.runTime > 0;
       },
     },
 
     methods: {
       toggle() {
-        if (this.done) {
+        if (this.breather.done) {
           this.reset();
-        } else if (this.status?.active) {
+        } else if (this.breather.active) {
           this.pause();
         } else {
           this.resume();
@@ -61,17 +57,17 @@
       },
 
       pause() {
-        this.$refs.breather.stop();
+        this.breather.stop();
       },
 
       resume() {
-        this.$refs.breather.start();
+        this.breather.start();
         this.settings.save();
       },
 
       reset() {
-        this.$refs.breather.stop();
-        this.$refs.breather.reset();
+        this.breather.stop();
+        this.breather.reset();
       },
     },
 
@@ -102,16 +98,24 @@
     justify-content: center;
     position: relative;
 
-    .icon {
-      $size: 25%;
-      $offset: (100% - $size)/2;
+    .overlay {
       position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       color: $color-bg;
-      width: $size;
-      height: $size;
-      top: $offset;
-      left: #{$offset + 1};
       pointer-events: none;
+
+      .icon {
+        $size: 25%;
+        width: $size;
+        height: $size;
+        padding-left: 1%;
+      }
     }
   }
 

@@ -1,13 +1,12 @@
 <template>
   <div class="status-root">
     <div class="controls">
-      <div>{{ $t(`status.phase.${done ? 'done' : status.phase}`) }}</div>
-      <div v-if="!done">{{ remaining }}</div>
-      <div v-if="status.active" class="button" @click="$emit('pause')">
+      <div v-if="!breather.done">{{ remaining }}</div>
+      <div v-if="breather.active" class="button" @click="$emit('pause')">
         <c-icon name="pause"/>
         <span>{{ $t('status.pause') }}</span>
       </div>
-      <div v-else-if="!done" class="button" @click="$emit('resume')">
+      <div v-else-if="!breather.done" class="button" @click="$emit('resume')">
         <c-icon name="play"/>
         <span>{{ $t('status.resume') }}</span>
       </div>
@@ -21,38 +20,28 @@
 </template>
 
 <script>
-  import Settings from '../model/Settings';
-  import Status from '../model/Status';
   import CProgress from './CProgress.vue';
   import CIcon from './CIcon.vue';
   import { formatSecondsDigital } from '../util/time';
+  import { Breather } from '../model/Breather';
 
   export default {
     components: { CIcon, CProgress },
 
     props: {
-      status: {
-        type: Status,
-        required: true,
-      },
-
-      settings: {
-        type: Settings,
+      breather: {
+        type: Breather,
         required: true,
       },
     },
 
     computed: {
       progress() {
-        return Math.floor(this.status.runTime * 10) / this.settings.totalTime / 10;
-      },
-
-      done() {
-        return this.settings.totalTime === this.status.runTime;
+        return Math.floor(this.breather.runTime * 10) / this.breather.settings.totalTime / 10;
       },
 
       remaining() {
-        return formatSecondsDigital(this.settings.totalTime - this.status.runTime);
+        return formatSecondsDigital(this.breather.settings.totalTime - this.breather.runTime);
       },
     },
   };
