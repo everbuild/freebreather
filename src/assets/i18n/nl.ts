@@ -1,6 +1,7 @@
 export default {
   settings: {
     timer: 'Timer',
+    unlimited: 'onbeperkt',
     breaths: 'ademhalingen',
     phase: {
       inhale: 'Inademen',

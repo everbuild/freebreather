@@ -1,18 +1,22 @@
-export function formatSecondsText(value) {
-  const minutes = Math.floor(value / 60);
-  const seconds = Math.round((value % 60) * 10) / 10;
+export function formatSecondsText(value, precision: 1 | 10 | 100 | 1000 = 1) {
+  const sign = Math.sign(value);
+  const minutes = Math.floor(value * sign / 60);
+  const seconds = Math.round((value * sign % 60) * precision) / precision;
   return [
+    sign < 0 && '-',
     minutes && `${minutes}m`,
-    (seconds || !minutes) && `${seconds}s`,
+    seconds && `${seconds}s`,
+    !minutes && !seconds && '0',
   ].filter(Boolean).join(' ');
 }
 
 export function formatSecondsDigital(value) {
-  const minutes = Math.floor(value / 60);
-  const seconds = Math.round(value % 60);
+  const sign = Math.sign(value);
+  const minutes = Math.floor(value * sign / 60);
+  const seconds = Math.round(value * sign % 60);
   if (minutes === 0) {
-    return seconds;
+    return seconds * sign;
   } else {
-    return minutes + ':' + `${seconds}`.padStart(2, '0');
+    return minutes * sign + ':' + `${seconds}`.padStart(2, '0');
   }
 }

@@ -2,7 +2,14 @@
   <form>
     <label class="field">
       <span class="label">{{ $t('settings.timer') }}</span>
-      <span class="preview">{{ formatSeconds(settings.totalTime) }} ({{ settings.cycles }} {{ $t('settings.breaths') }})</span>
+      <span class="preview">
+        <template v-if="settings.unlimited">
+          {{ $t('settings.unlimited') }}
+        </template>
+        <template v-else>
+          {{ formatSeconds(settings.totalTime, 1) }} ({{ settings.cycles }} {{ $t('settings.breaths') }})
+        </template>
+      </span>
       <c-slider v-model="settings.cycles" :values="cycleValues"/>
     </label>
 
@@ -68,6 +75,7 @@
           ...range(12, 36, 2),
           ...range(36, 90, 4),
           ...range(90, 190, 10),
+          Number.POSITIVE_INFINITY,
         ];
       },
 
@@ -77,8 +85,8 @@
     },
 
     methods: {
-      formatSeconds(value) {
-        return formatSecondsText(value);
+      formatSeconds(value, precision = 10) {
+        return formatSecondsText(value, precision);
       },
     },
   };

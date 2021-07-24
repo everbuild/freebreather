@@ -15,7 +15,7 @@
         <span>{{ $t('status.reset') }}</span>
       </div>
     </div>
-    <c-progress :value="breather.progress"/>
+    <c-progress v-if="!breather.settings.unlimited" :value="breather.progress"/>
   </div>
 </template>
 

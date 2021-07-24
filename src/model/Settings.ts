@@ -36,6 +36,10 @@ export default class Settings implements ExtendedPhases {
     return this.inhale + this.inhaled + this.exhale + this.exhaled;
   }
 
+  get unlimited() {
+    return this.cycles === Number.POSITIVE_INFINITY;
+  }
+
   get totalTime() {
     return this.cycleTime * this.cycles;
   }
@@ -48,6 +52,7 @@ export default class Settings implements ExtendedPhases {
     const value = localStorage.getItem('settings');
     if (value) {
       const data = JSON.parse(value);
+      if (data.cycles === null) data.cycles = Number.POSITIVE_INFINITY;
       Object.assign(this, data);
     }
     return this;
