@@ -16,6 +16,7 @@ export default {
     reset: 'Opnieuw',
   },
   guide: {
+    warmup: 'Maak je klaar om in te ademen',
     inhale: 'Adem in',
     inhaled: '',
     exhale: 'Adem uit',

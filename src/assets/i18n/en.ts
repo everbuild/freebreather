@@ -16,6 +16,7 @@ export default {
     reset: 'Reset',
   },
   guide: {
+    warmup: 'Get ready to breathe in',
     inhale: 'Breathe in',
     inhaled: 'Pause',
     exhale: 'Breathe out',

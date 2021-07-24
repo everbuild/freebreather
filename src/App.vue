@@ -11,7 +11,7 @@
       <c-settings class="settings" :settings="settings"/>
     </div>
   </div>
-  <c-status v-if="started" :breather="breather" @pause="pause" @resume="resume" @reset="reset"/>
+  <c-status v-if="breather.started" :breather="breather" @pause="pause" @resume="resume" @reset="reset"/>
 </template>
 
 <script>
@@ -39,10 +39,6 @@
       active() {
         return this.breather.active || this.breather.done;
       },
-
-      started() {
-        return this.breather.runTime > 0;
-      },
     },
 
     methods: {
@@ -66,7 +62,6 @@
       },
 
       reset() {
-        this.breather.stop();
         this.breather.reset();
       },
     },

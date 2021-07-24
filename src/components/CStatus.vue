@@ -1,7 +1,7 @@
 <template>
   <div class="status-root">
     <div class="controls">
-      <div v-if="!breather.done">{{ remaining }}</div>
+      <div>{{ runTime }}</div>
       <div v-if="breather.active" class="button" @click="$emit('pause')">
         <c-icon name="pause"/>
         <span>{{ $t('status.pause') }}</span>
@@ -15,7 +15,7 @@
         <span>{{ $t('status.reset') }}</span>
       </div>
     </div>
-    <c-progress :value="progress"/>
+    <c-progress :value="breather.progress"/>
   </div>
 </template>
 
@@ -36,12 +36,8 @@
     },
 
     computed: {
-      progress() {
-        return Math.floor(this.breather.runTime * 10) / this.breather.settings.totalTime / 10;
-      },
-
-      remaining() {
-        return formatSecondsDigital(this.breather.settings.totalTime - this.breather.runTime);
+      runTime() {
+        return formatSecondsDigital(this.breather.runTime);
       },
     },
   };

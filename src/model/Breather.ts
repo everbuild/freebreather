@@ -42,13 +42,13 @@ const CYCLE: Array<Phase> = [
 ];
 
 export class Breather {
-  public runTime!: number;
+  public runTime?: number;
+  public cycles!: number;
   public phaseIdx?: number;
   public phase?: Phase;
-  public active = false;
-  public cycles = 0;
+  public active!: boolean;
 
-  constructor(private settings: Settings) {
+  constructor(readonly settings: Settings) {
     this.reset();
   }
 
@@ -56,20 +56,27 @@ export class Breather {
     return this.phase?.value ?? 0;
   }
 
+  get started() {
+    return this.active || this.cycles > 0;
+  }
+
   get done(): boolean {
     return this.cycles >= this.settings.cycles;
   }
 
+  get progress() {
+    return this.cycles / this.settings.cycles;
+  }
+
   reset() {
-    this.runTime = 0;
+    this.stop();
     this.cycles = 0;
-    this.phase = undefined;
   }
 
   start() {
     if (this.active) return;
     this.active = true;
-    this.runTime -= this.settings.warmup;
+    this.runTime = this.cycles * this.settings.cycleTime - this.settings.warmup;
     this.phaseIdx = this.cycles * CYCLE.length - 1;
     this.startPhase(WARMUP);
     requestAnimationFrame(t1 => {
