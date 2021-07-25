@@ -26,7 +26,6 @@ export class Breather {
   public cycles!: number;
   public phaseIdx?: number;
 
-  private _phase?: Phase;
   private _state = State.IDLE;
   private _time = 0;
 
@@ -58,7 +57,7 @@ export class Breather {
       case State.WARMUP:
         return 'warmup';
       case State.CYCLE:
-        return this._phase.name;
+        return this.phase.name;
       case State.DONE:
         return 'done';
     }
@@ -138,8 +137,11 @@ export class Breather {
     this._time = this.cycles * this.settings.cycleTime;
   }
 
+  private get phase() {
+    return CYCLE[this.phaseIdx % CYCLE.length];
+  }
+
   private startPhase() {
-    const _phase = CYCLE[this.phaseIdx % CYCLE.length];
-    this._phaseAnim.transitionTo(_phase.target, this.settings[_phase.name]);
+    this._phaseAnim.transitionTo(this.phase.target, this.settings[this.phase.name]);
   }
 }
