@@ -1,3 +1,4 @@
+import { reactive } from 'vue';
 import Settings, { PhaseName } from './Settings';
 import Animator, { Animation } from './Animator';
 
@@ -29,8 +30,8 @@ export class Breather {
   private _state = State.IDLE;
   private _time = 0;
 
-  private _warmupAnim = new Animation(this.onWarmupDone.bind(this));
-  private _phaseAnim = new Animation(this.onPhaseDone.bind(this));
+  private _warmupAnim = new Animation(this.onWarmupDone.bind(reactive(this)));
+  private _phaseAnim = new Animation(this.onPhaseDone.bind(reactive(this)));
   private _animator = new Animator([this._warmupAnim, this._phaseAnim]);
 
   constructor(readonly settings: Settings) {
