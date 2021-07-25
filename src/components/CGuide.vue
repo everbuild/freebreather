@@ -1,6 +1,6 @@
 <template>
   <div class="guide-root" :class="rootClass">
-    {{ $t(`guide.${breather.done ? 'done' : breather.phase.name}`) }}
+    {{ (`guide.${breather.stateName}`) }}
   </div>
 </template>
 

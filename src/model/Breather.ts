@@ -1,59 +1,66 @@
 import Settings, { PhaseName } from './Settings';
-import { easeInOutQuad } from '../util/easing';
+import Animator, { Animation } from './Animator';
 
-type TransitionFunction = (x: number) => number;
-
-class Phase {
-  public from = 0;
-  public time = 0;
-  public duration: number;
-
-  constructor(
-    public name: PhaseName,
-    public to: number,
-    private fn: TransitionFunction = easeInOutQuad,
-  ) {
-  }
-
-  get range() {
-    return this.to - this.from;
-  }
-
-  get value() {
-    return this.from + this.fn(this.time / this.duration) * this.range;
-  }
-
-  get done(): boolean {
-    return this.time >= this.duration;
-  }
-
-  get remainder(): number {
-    return this.time - this.duration;
-  }
+interface Phase {
+  name: PhaseName;
+  target: 0 | 1;
 }
 
-const WARMUP = new Phase('warmup', 0);
-
 const CYCLE: Array<Phase> = [
-  new Phase('inhale', 1),
-  new Phase('inhaled', 1),
-  new Phase('exhale', 0),
-  new Phase('exhaled', 0),
+  { name: 'inhale', target: 1 },
+  { name: 'inhaled', target: 1 },
+  { name: 'exhale', target: 0 },
+  { name: 'exhaled', target: 0 },
 ];
 
+enum State {
+  IDLE,
+  WARMUP,
+  CYCLE,
+  COOLDOWN,
+  DONE
+}
+
 export class Breather {
-  public runTime?: number;
   public cycles!: number;
   public phaseIdx?: number;
-  public phase?: Phase;
-  public active!: boolean;
+
+  private _phase?: Phase;
+  private _state = State.IDLE;
+  private _time = 0;
+
+  private _warmupAnim = new Animation(this.onWarmupDone.bind(this));
+  private _phaseAnim = new Animation(this.onPhaseDone.bind(this));
+  private _animator = new Animator([this._warmupAnim, this._phaseAnim]);
 
   constructor(readonly settings: Settings) {
     this.reset();
   }
 
+  get runTime() {
+    return this.active ? this._animator.time : this._time;
+  }
+
   get value() {
-    return this.phase?.value ?? 0;
+    return this._phaseAnim.value;
+  }
+
+  get active() {
+    return this._state === State.WARMUP || this._state === State.CYCLE;
+  }
+
+  get stateName() {
+    switch (this._state) {
+      case State.IDLE:
+      case State.COOLDOWN:
+        return 'idle';
+      case State.WARMUP:
+        return 'warmup';
+      case State.CYCLE:
+        return this._phase.name;
+      case State.DONE:
+        return 'done';
+    }
   }
 
   get started() {
@@ -75,47 +82,63 @@ export class Breather {
 
   start() {
     if (this.active) return;
-    this.active = true;
-    this.runTime = this.cycles * this.settings.cycleTime - this.settings.warmup;
-    this.phaseIdx = this.cycles * CYCLE.length - 1;
-    this.startPhase(WARMUP);
-    requestAnimationFrame(t1 => {
-      requestAnimationFrame(t2 => this.frame(t1, t2));
-    });
+    this._state = State.WARMUP;
+    this._animator.active = true;
+    this._animator.time = this._time - this.settings.warmup;
+    this._warmupAnim.transitionTo(0, this.settings.warmup);
   }
 
   stop() {
-    this.active = false;
-  }
-
-  private frame(t1, t2) {
-    if (!this.active) return;
-
-    const dt = (t2 - t1) / 1000;
-    this.runTime += dt;
-    this.phase.time += dt;
-    this.updatePhase();
-
-    requestAnimationFrame(t3 => this.frame(t2, t3));
-  }
-
-  private updatePhase() {
-    while (this.phase.done) {
-      ++this.phaseIdx;
-      this.cycles = Math.floor(this.phaseIdx / CYCLE.length);
-      if (this.done) {
-        this.active = false;
-        this.runTime = this.settings.totalTime;
-      } else {
-        this.startPhase(CYCLE[this.phaseIdx % CYCLE.length], this.phase.remainder);
+    switch (this._state) {
+      case State.WARMUP: {
+        this._animator.active = false;
+        this._state = State.IDLE;
+        break;
+      }
+      case State.CYCLE: {
+        this.saveTime();
+        this._state = State.COOLDOWN;
+        this._phaseAnim.transitionTo(0, this.value / 2);
+        break;
       }
     }
   }
 
-  private startPhase(phase: Phase, at = 0) {
-    phase.from = this.value;
-    phase.time = at;
-    phase.duration = this.settings[phase.name];
-    this.phase = phase;
+  private onWarmupDone() {
+    if (this._state !== State.WARMUP) return;
+    this._state = State.CYCLE;
+    this.phaseIdx = this.cycles * CYCLE.length;
+    this.startPhase();
+  }
+
+  private onPhaseDone() {
+    switch (this._state) {
+      case State.CYCLE: {
+        ++this.phaseIdx;
+        this.cycles = Math.floor(this.phaseIdx / CYCLE.length);
+        if (this.done) {
+          this.saveTime();
+          this._animator.active = false;
+          this._state = State.DONE;
+        } else {
+          this.startPhase();
+        }
+        break;
+      }
+      case State.COOLDOWN: {
+        this._animator.active = false;
+        this._state = State.IDLE;
+        break;
+      }
+    }
+  }
+
+  private saveTime() {
+    this._time = this.cycles * this.settings.cycleTime;
+  }
+
+  private startPhase() {
+    const _phase = CYCLE[this.phaseIdx % CYCLE.length];
+    this._phaseAnim.transitionTo(_phase.target, this.settings[_phase.name]);
   }
 }
