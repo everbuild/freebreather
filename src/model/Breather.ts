@@ -14,7 +14,7 @@ const CYCLE: Array<Phase> = [
   { name: 'exhaled', target: 0 },
 ];
 
-enum State {
+export enum State {
   IDLE,
   WARMUP,
   CYCLE,
@@ -49,18 +49,12 @@ export class Breather {
     return this._state === State.WARMUP || this._state === State.CYCLE;
   }
 
-  get stateName() {
-    switch (this._state) {
-      case State.IDLE:
-      case State.COOLDOWN:
-        return 'idle';
-      case State.WARMUP:
-        return 'warmup';
-      case State.CYCLE:
-        return this.phase.name;
-      case State.DONE:
-        return 'done';
-    }
+  get state() {
+    return this._state;
+  }
+
+  get phaseName() {
+    return this._state === State.CYCLE ? this.phase.name : undefined;
   }
 
   get started() {

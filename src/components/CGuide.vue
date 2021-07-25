@@ -1,17 +1,15 @@
 <template>
-  <div class="guide-root" :class="rootClass">
-    {{ (`guide.${breather.stateName}`) }}
+  <div class="guide-root" :class="{ faded }">
+    {{ text }}
   </div>
 </template>
 
 <script>
-  import CProgress from './CProgress.vue';
-  import CIcon from './CIcon.vue';
-  import { Breather } from '../model/Breather';
+  import { Breather, State } from '../model/Breather';
+
+  const FADE_S = .5;
 
   export default {
-    components: { CIcon, CProgress },
-
     props: {
       breather: {
         type: Breather,
@@ -21,44 +19,62 @@
 
     data() {
       return {
-        faded: false,
+        faded: true,
       };
     },
 
     computed: {
-      rootClass() {
-        return {
-          active: (this.breather.settings.guide && this.breather.active) || this.done,
-          faded: this.faded,
-        };
+      key() {
+        switch (this.breather.state) {
+          case State.WARMUP:
+            return 'warmup';
+          case State.CYCLE:
+            return this.breather.phaseName;
+          case State.DONE:
+            return 'done';
+        }
+      },
+
+      text() {
+        return this.key ? this.$t(`guide.${this.key}`) : '';
+      },
+    },
+
+    methods: {
+      onTextUpdate() {
+        console.log('onTextUpdate', this.text);
+        if (this.text) {
+          this.faded = false;
+          const ttl = this.breather.settings[this.key];
+          if (ttl) {
+            clearTimeout(this.tid);
+            this.tid = setTimeout(() => {
+              this.faded = true;
+            }, Math.max(0, (ttl - FADE_S) * 1000));
+          }
+        } else {
+          this.faded = true;
+        }
       },
     },
 
     watch: {
-      'breather.active'(active) {
-        if (active) {
-          this.tid = setTimeout(() => this.faded = true, this.settings.cycleTime * 4);
-        } else {
-          this.faded = false;
-          clearTimeout(this.tid);
-        }
-      },
+      text: 'onTextUpdate',
+    },
+
+    mounted() {
+      this.onTextUpdate();
     },
   };
 </script>
 
 <style lang="scss" scoped>
   .guide-root {
-    display: none;
     font-size: 2rem;
+    transition: opacity .5s;
 
-    &.active {
-      display: block;
-
-      &.faded {
-        opacity: 0;
-        transition: opacity 4s;
-      }
+    &.faded {
+      opacity: 0;
     }
   }
 </style>

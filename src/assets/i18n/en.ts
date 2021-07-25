@@ -10,6 +10,7 @@ export default {
       exhaled: 'Pause after breathing out',
     },
     presets: 'Presets:',
+    guide: 'Show instructions',
   },
   status: {
     pause: 'Pause',

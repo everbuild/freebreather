@@ -42,6 +42,11 @@
       <a v-for="preset in presets" href="#" @click="settings.apply(preset)">{{ preset.name }}</a>
     </div>
 
+    <label class="field clickable checkbox">
+      <span class="label">{{ $t('settings.guide') }}</span>
+      <input class="clickable" type="checkbox" v-model="settings.guide">
+    </label>
+
     <div class="info">
       <a class="button" href="https://github.com/everbuild/freebreather" target="_blank">
         <c-icon name="github"/>
@@ -108,12 +113,23 @@
   .field {
     display: block;
     margin-bottom: 1em;
+
+    &.checkbox {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .label {
+        float: none;
+      }
+    }
   }
 
   .presets {
     display: flex;
     flex-direction: row;
     margin-right: -1em;
+    margin-bottom: 1.5em;
 
     a {
       flex: 1 0 auto;

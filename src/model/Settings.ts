@@ -1,18 +1,14 @@
 
-export interface CorePhases {
+export interface PhaseSettings {
   inhale: number;
   inhaled: number;
   exhale: number;
   exhaled: number;
 }
 
-export interface ExtendedPhases extends CorePhases {
-  warmup: number;
-}
+export type PhaseName = keyof PhaseSettings;
 
-export type PhaseName = keyof ExtendedPhases;
-
-export default class Settings implements ExtendedPhases {
+export default class Settings implements PhaseSettings {
   cycles = 36;
   warmup = 3;
   inhale: number;
@@ -59,7 +55,7 @@ export default class Settings implements ExtendedPhases {
   }
 }
 
-export class Preset implements CorePhases {
+export class Preset implements PhaseSettings {
   constructor(
     public name: number,
     public inhale: number,

@@ -3,8 +3,8 @@
     <div class="breather-block clickable">
       <c-breather :breather="breather" @click="toggle"/>
       <div class="overlay">
-        <c-guide v-if="active" :breather="breather"/>
-        <c-icon v-else name="play"/>
+        <c-guide v-if="showGuide" :breather="breather"/>
+        <c-icon v-if="!active" name="play"/>
       </div>
     </div>
     <div class="settings-block">
@@ -38,6 +38,12 @@
     computed: {
       active() {
         return this.breather.active || this.breather.done;
+      },
+
+      showGuide() {
+        if (this.breather.done) return true;
+        if (!this.settings.guide) return false;
+        return this.breather.active && this.breather.cycles < 5;
       },
     },
 

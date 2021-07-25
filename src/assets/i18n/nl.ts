@@ -10,6 +10,7 @@ export default {
       exhaled: 'Pauze na uitademen',
     },
     presets: 'Presets:',
+    guide: 'Toon instructies',
   },
   status: {
     pause: 'Pauze',
@@ -19,9 +20,9 @@ export default {
   guide: {
     warmup: 'Maak je klaar om in te ademen',
     inhale: 'Adem in',
-    inhaled: '',
+    inhaled: 'Pauze',
     exhale: 'Adem uit',
-    exhaled: '',
+    exhaled: 'Pauze',
     done: 'Helemaal klaar!',
   },
   homepage: 'dit is open-source',
