@@ -1,14 +1,12 @@
 <template>
   <form>
-    <label class="field">
-      <span class="label">{{ $t('settings.timer') }}</span>
+    <label class="field section-end">
+      <span class="label">
+        {{ $t('settings.timer') }}
+        <span v-if="!settings.unlimited" class="detail">{{ settings.cycles }} {{ $t('settings.breaths') }}</span>
+      </span>
       <span class="preview">
-        <template v-if="settings.unlimited">
-          {{ $t('settings.unlimited') }}
-        </template>
-        <template v-else>
-          {{ formatSeconds(settings.totalTime, 1) }} ({{ settings.cycles }} {{ $t('settings.breaths') }})
-        </template>
+        {{ settings.unlimited ? $t('settings.unlimited') : formatSeconds(settings.totalTime, 1) }}
       </span>
       <c-slider v-model="settings.cycles" :values="cycleValues"/>
     </label>
@@ -37,12 +35,12 @@
       <c-slider v-model="settings.exhaled" min="0" max="7" step=".1"/>
     </label>
 
-    <div class="presets">
+    <div class="presets section-end">
       <label>{{ $t('settings.presets') }}</label>
       <a v-for="preset in presets" href="#" @click="settings.apply(preset)">{{ preset.name }}</a>
     </div>
 
-    <label class="field clickable checkbox">
+    <label class="field clickable checkbox section-end">
       <span class="label">{{ $t('settings.guide') }}</span>
       <input class="clickable" type="checkbox" v-model="settings.guide">
     </label>
@@ -110,6 +108,12 @@
     float: right;
   }
 
+  .detail {
+    font-size: .75em;
+    color: mix($color-primary, $color-bg, 70%);
+    margin: 0 .5em;
+  }
+
   .field {
     display: block;
     margin-bottom: 1em;
@@ -125,11 +129,14 @@
     }
   }
 
+  .section-end {
+    margin-bottom: 2.5em;
+  }
+
   .presets {
     display: flex;
     flex-direction: row;
     margin-right: -1em;
-    margin-bottom: 1.5em;
 
     a {
       flex: 1 0 auto;
