@@ -5,9 +5,9 @@ export default {
     breaths: 'breaths',
     phase: {
       inhale: 'Breathe in',
-      inhaled: 'Pause after breathing in',
+      inhaled: 'Pause',
       exhale: 'Breathe out',
-      exhaled: 'Pause after breathing out',
+      exhaled: 'Pause',
     },
     presets: 'Presets:',
     guide: 'Show instructions',
@@ -18,7 +18,7 @@ export default {
     reset: 'Reset',
   },
   guide: {
-    warmup: 'Get ready to breathe in',
+    warmup: 'Get ready',
     inhale: 'Breathe in',
     inhaled: 'Pause',
     exhale: 'Breathe out',

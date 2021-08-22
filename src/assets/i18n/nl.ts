@@ -18,12 +18,12 @@ export default {
     reset: 'Opnieuw',
   },
   guide: {
-    warmup: 'Maak je klaar om in te ademen',
+    warmup: 'Klaar?',
     inhale: 'Adem in',
     inhaled: 'Pauze',
     exhale: 'Adem uit',
     exhaled: 'Pauze',
-    done: 'Helemaal klaar!',
+    done: 'Klaar!',
   },
   homepage: 'dit is open-source',
 };
