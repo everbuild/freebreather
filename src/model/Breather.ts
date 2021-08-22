@@ -72,6 +72,7 @@ export class Breather {
   reset() {
     this.stop();
     this.cycles = 0;
+    this._time = 0;
   }
 
   start() {
