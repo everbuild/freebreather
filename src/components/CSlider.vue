@@ -55,35 +55,37 @@
 <style lang="scss" scoped>
   $size: 60vh;
   $color-knob: darken($color-accent,10);
+  $height: 1em;
 
   input {
     color: $color-knob;
     cursor: pointer;
     -webkit-appearance: none;
     width: 100%;
-    height: 25px;
-    background: $color-primary;
+    height: $height;
     outline: none;
-    opacity: 0.7;
+    border-radius: $height/2;
+    overflow: hidden;
+    background-color: mix($color-primary, $color-bg, 20%);
     -webkit-transition: .2s;
-    transition: opacity .2s;
+    transition: background-color .2s;
 
     &:hover {
-      opacity: 1;
+      background-color: mix($color-primary, $color-bg, 40%);
     }
 
     &::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 25px;
-      height: 25px;
+      width: 2em;
+      height: $height;
       background: $color-knob;
       cursor: pointer;
     }
 
     &::-moz-range-thumb {
-      width: 25px;
-      height: 25px;
+      width: 2em;
+      height: $height;
       background: $color-knob;
       cursor: pointer;
     }
